@@ -1,6 +1,8 @@
----
-theme :
-  name : twitter
----
-{% include codepiano/setup %}
-{% include themes/twitter/default.html %}
+{% include main_header.html %}
+{% include main_sidebar.html %}
+
+<section>
+	{{ content }}
+</section>
+
+{% include main_footer.html %}

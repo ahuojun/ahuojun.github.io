@@ -1,5 +1,12 @@
----
-layout: default
----
-{% include codepiano/setup %}
-{% include themes/twitter/post.html %}
+{% include main_header.html %}
+
+<div class="blogpost">
+	<a href="/">&#8592; Home</a>
+	<h2 class="post-title">{{ page.title }}</h2>
+	{{ content }}
+	<hr style="border-top:1px solid #28323C;"/>
+	<p>评论请前往 <a href="http://2049bbs.xyz/">2049BBS</a></p>
+	<div class="social-share" data-disabled="linkedin,diandian,tencent"></div>
+</div>
+
+{% include main_footer.html %}

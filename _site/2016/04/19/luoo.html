@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ciao!</title>
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+    <link rel="stylesheet" href="/stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="/stylesheets/bootstrap-social.css">
+    <link rel="stylesheet" href="/libs/bootstrap-3.3.5-dist/css/bootstrap.css">
+    <link rel="shortcut icon" href="/images/t.jpg">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="alternate" type="application/atom+xml" title="Ciao!" href="/atom.xml">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="http://localhost:4000/libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+
+<div class="blogpost">
+	<a href="/">&#8592; Home</a>
+	<h2 class="post-title">用R语言批量下载落网音乐</h2>
+	<p>觉得 <a href="http://www.luoo.net/">落网</a> 的音乐很不错，正好又在学习 R语言的爬虫，顺便就写了一个批量下载脚本。</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## 首先加载 R包</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">RCurl</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">rvest</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h4 id="1下载落网的期刊">1.下载落网的期刊</h4>
+
+<p><a href="http://www.luoo.net/music/">http://www.luoo.net/music/</a></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## 下载函数</span><span class="w">
+</span><span class="n">Luo_Volume</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">Volume</span><span class="p">){</span><span class="w">
+
+    </span><span class="n">V_url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_html</span><span class="p">(</span><span class="n">paste</span><span class="p">(</span><span class="s2">"http://www.luoo.net/music/"</span><span class="p">,</span><span class="w"> </span><span class="n">Volume</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">))</span><span class="w">
+    </span><span class="n">Title</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">html_text</span><span class="p">(</span><span class="n">html_nodes</span><span class="p">(</span><span class="n">V_url</span><span class="p">,</span><span class="w"> </span><span class="s2">"a.trackname.btn-play"</span><span class="p">))</span><span class="w">
+    </span><span class="n">ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">substr</span><span class="p">(</span><span class="n">Title</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w">
+
+    </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">ID</span><span class="p">){</span><span class="w">
+        </span><span class="n">Song_URL</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">paste</span><span class="p">(</span><span class="s2">"http://luoo-mp3.kssws.ks-cdn.com/low/luoo/radio801/"</span><span class="p">,</span><span class="w">
+                          </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="s2">".mp3"</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w">
+        </span><span class="n">Song</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">getURLContent</span><span class="p">(</span><span class="n">Song_URL</span><span class="p">)</span><span class="w">
+        </span><span class="n">Name</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">paste</span><span class="p">(</span><span class="n">Volume</span><span class="p">,</span><span class="w"> </span><span class="s2">"-"</span><span class="p">,</span><span class="w"> </span><span class="n">Title</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="s2">".mp3"</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w">
+        </span><span class="n">save</span><span class="p">(</span><span class="n">Song</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">compress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w">
+        </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="w">
+
+        </span><span class="c1">## 随机休眠 2-8 秒，防止反爬虫，可以注释掉</span><span class="w">
+        </span><span class="n">Sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sample</span><span class="p">(</span><span class="m">2</span><span class="o">:</span><span class="m">8</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w">
+        </span><span class="n">Sys.sleep</span><span class="p">(</span><span class="n">Sleep</span><span class="p">)</span><span class="w">
+
+        </span><span class="n">print</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">paste</span><span class="p">(</span><span class="s2">"Wait"</span><span class="p">,</span><span class="w"> </span><span class="n">Sleep</span><span class="p">,</span><span class="w"> </span><span class="s2">"seconds"</span><span class="p">)))</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1">## 大展伸手的时候到了！</span><span class="w">
+</span><span class="c1">### 下载单个期刊，如，801期，http://www.luoo.net/music/801</span><span class="w">
+</span><span class="n">Luo_Volume</span><span class="p">(</span><span class="m">801</span><span class="p">)</span><span class="w">
+</span><span class="c1">### 同时下载多个期刊，如 800 到 811，直接</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">800</span><span class="o">:</span><span class="m">811</span><span class="p">){</span><span class="n">Luo_Volume</span><span class="p">(</span><span class="n">i</span><span class="p">)}</span><span class="w">
+</span></code></pre></div></div>
+
+<h4 id="2下载推荐的单曲">2.下载推荐的单曲</h4>
+
+<p><a href="http://www.luoo.net/musician/">http://www.luoo.net/musician/</a></p>
+
+<p>注：某些特殊后缀资源不能下载，如 <a href="http://luoo-mp3.kssws.ks-cdn.com/low/2014/0506_01.mp3">http://luoo-mp3.kssws.ks-cdn.com/low/2014/0506_01.mp3</a></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## 首先生成每日推荐的 ID</span><span class="w">
+</span><span class="n">DayID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">Start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2014-06-05"</span><span class="p">,</span><span class="w"> </span><span class="n">End</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sys.Date</span><span class="p">()){</span><span class="w">
+    </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.Date</span><span class="p">(</span><span class="n">Start</span><span class="p">)</span><span class="w">
+    </span><span class="n">E</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.Date</span><span class="p">(</span><span class="n">End</span><span class="p">)</span><span class="w">
+    </span><span class="n">Total_days</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">S</span><span class="w">
+
+    </span><span class="n">ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">vector</span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Total_days</span><span class="p">)</span><span class="w">
+    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">Total_days</span><span class="p">){</span><span class="w">
+        </span><span class="n">ID</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">format</span><span class="p">(</span><span class="n">S</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="s2">"%Y%m%d"</span><span class="p">)</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+
+    </span><span class="n">ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1">## 下载函数</span><span class="w">
+</span><span class="n">Download</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">ID</span><span class="p">){</span><span class="w">
+    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">ID</span><span class="p">){</span><span class="w">
+        </span><span class="n">Song_URL</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">paste</span><span class="p">(</span><span class="s2">"http://luoo-mp3.kssws.ks-cdn.com/low/chinese/"</span><span class="p">,</span><span class="w">
+            </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="s2">".mp3"</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w">
+        </span><span class="n">Song</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">getURLContent</span><span class="p">(</span><span class="n">Song_URL</span><span class="p">)</span><span class="w">
+        </span><span class="n">Name</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">paste</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="s2">".mp3"</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w">
+
+        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">object.size</span><span class="p">(</span><span class="n">Song</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="n">save</span><span class="p">(</span><span class="n">Song</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">compress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w">
+            </span><span class="c1">## 随机休眠 2-8 秒，防止反爬虫，可以注释掉</span><span class="w">
+            </span><span class="n">Sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sample</span><span class="p">(</span><span class="m">2</span><span class="o">:</span><span class="m">8</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w">
+            </span><span class="n">print</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">paste</span><span class="p">(</span><span class="s2">"Wait"</span><span class="p">,</span><span class="w"> </span><span class="n">Sleep</span><span class="p">,</span><span class="w"> </span><span class="s2">"seconds"</span><span class="p">)))</span><span class="w">
+            </span><span class="n">Sys.sleep</span><span class="p">(</span><span class="n">Sleep</span><span class="p">)</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1">## 使用方法</span><span class="w">
+</span><span class="c1">### 自选指定日的推荐曲目</span><span class="w">
+</span><span class="n">ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">20160201</span><span class="w">
+</span><span class="n">Download</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">### 多个日期，如二月和三月，月份之间用分号隔开</span><span class="w">
+</span><span class="n">ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">20160201</span><span class="o">:</span><span class="m">20160229</span><span class="p">,</span><span class="w"> </span><span class="m">20160301</span><span class="o">:</span><span class="m">20160331</span><span class="p">)</span><span class="w">
+</span><span class="n">Download</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">### 选择起止日期，下载两个日期之间的全部推荐单曲，如 2015-01-01 到 2015-01-10 之间</span><span class="w">
+</span><span class="n">ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">DayID</span><span class="p">(</span><span class="s2">"2015-01-01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"2015-01-10"</span><span class="p">);</span><span class="w">
+</span><span class="n">Download</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">### 丧心病狂模式，下载所有日期里的推荐曲目</span><span class="w">
+</span><span class="n">ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">DayID</span><span class="p">()</span><span class="w">
+</span><span class="n">Download</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+	<hr style="border-top:1px solid #28323C;"/>
+	<p>评论请前往 <a href="http://2049bbs.xyz/">2049BBS</a></p>
+	<div class="social-share" data-disabled="linkedin,diandian,tencent"></div>
+</div>
+
+    <script src="/javascripts/scale.fix.js"></script>
+  </body>
+</html>
+

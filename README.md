@@ -1,37 +1,15 @@
-## Welcome to GitHub Pages
+## stormzhang的个人博客
 
-You can use the [editor on GitHub](https://github.com/ahuojun/ahuojun.github.io/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+基于jekyll的个人博客站点[http://stormzhang.com](http://stormzhang.com)，主题风格本着"simple is beautiful"的原则。
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## 关于我
 
-### Markdown
+Android开发者 + Ruby语言爱好者 + Google脑残粉，爱技术， 爱开源， 爱设计， 爱赚钱。互联网中毒症患者，Want to make a good app!
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## 联系我
 
-```markdown
-Syntax highlighted code block
+* Github: [stormzhang](https://github.com/stormzhang)
 
-# Header 1
-## Header 2
-### Header 3
+* Weibo: [googdev](http://weibo.com/zhangqi8)
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ahuojun/ahuojun.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+* 知乎: [stormzhang](http://www.zhihu.com/people/stormzhang)

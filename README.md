@@ -1,4 +1,4 @@
-个人博客 <https://tsai1993.github.io>，fork 自大神 [Nicole White](https://nicolewhite.github.io/)。
+个人博客 <https://ahuojun.github.io/>，fork 自大神 [Nicole White](https://nicolewhite.github.io/)，并修改自前辈大神 [Nicole White](https://tsai1993.github.io/)的中文改版。
 
 ### 优化
 
